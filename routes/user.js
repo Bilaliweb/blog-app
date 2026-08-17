@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { signupUser, redirectToLogin, redirectToSingup } = require('../controllers/user')
+const { signupUser, redirectToLogin, redirectToSingup, loginUser } = require('../controllers/user')
 
 // Router instance
 const userRouter = Router()
@@ -10,5 +10,7 @@ userRouter.get('/login', redirectToLogin)
 userRouter.get('/signup', redirectToSingup)
 // Post Signup
 userRouter.post('/signup', signupUser)
+// Post Login
+userRouter.post('/login', loginUser)
 
 module.exports = userRouter;
