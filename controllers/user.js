@@ -2,8 +2,6 @@ const User = require("../models/user");
 
 // Sing up a new user
 async function signupUser(req, res) {
-    console.log('Request: ', req);
-    
     const { fullName, email, password } = req?.body;
 
     // Create a user in db
@@ -12,7 +10,22 @@ async function signupUser(req, res) {
         email,
         password
     })
+    // Redirect to home screen
+    return res.redirect('/')
+}
 
+// Log In a user
+async function loginUser(req, res) {
+    const { email, password } = req.body
+    // Find user from db
+    const findUser = await User.findOne({ email })
+    // Throw error if user not found
+    if(!findUser) return res.status(401).json({ msg: 'Invalid Credentials.' })
+    // Compare user provided password to original hashed password for user trying to login
+    const isMatch = await findUser.compareLoginPassword(password)
+    // Throw error if incorrect password
+    if(!isMatch) return res.status(401).json({ msg: 'Incorrect Password.' })
+    // Redirect to home screen
     return res.redirect('/')
 }
 
@@ -27,6 +40,7 @@ function redirectToSingup(req, res) {
 
 module.exports = {
     signupUser,
+    loginUser,
     redirectToLogin,
     redirectToSingup
 }

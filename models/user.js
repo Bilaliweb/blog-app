@@ -34,32 +34,32 @@ const userSchema = new Schema({
     timestamps: true
 })
 
-// Hasing the password
-userSchema.pre('save', function (next) {
-    // 'this' will represent this whole user schema
+// Hashing the password
+userSchema.pre('save', async function () {
+    // No Need to use next() for current logic
+
+    // Referencing to this current user schema
     const user = this;
 
-    // Ignore if password is not modified
-    // next() is called to prevent unnecessary hanging
-    if (!user.isModified('password')) return next();
+    // Ignore if password didn't get modified
+    if (!user.isModified('password')) return;
 
-    // Random string as secret key
-    const salt = randomBytes(16).toString()
+    try {
+        // Use bcrypt as it's more secure (slow hashing)
+        // A cost factor of 10-12 is recommended for modern servers
+        const salt = await bcrypt.genSalt(10); 
+        user.password = await bcrypt.hash(user.password, salt);
+        
+    } catch (error) {
+        // Pass errors to Mongoose's error handling
+        throw error
+    }
+});
 
-    // Create a hash password
-    const hashedPassword = createHmac('sha256', salt)
-        // Mention the field which we want to update
-        .update(user.password)
-        // Mention the format we want for result 
-        .digest('hex');
-
-    // Updating the object of user
-    this.salt = salt;
-    // Original password stored as hashed password
-    this.password = hashedPassword;
-
-    return next();
-})
+// Function to compare user provided password with stored hashed password
+userSchema.methods.compareLoginPassword = async function (passwordFromRequestBody) {
+    return await bcrypt.compare(passwordFromRequestBody, this.password)
+}
 
 // Creating a table/model
 const User = model('user', userSchema)
