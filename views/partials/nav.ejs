@@ -31,3 +31,12 @@
       </div>
     </div>
   </nav>
+
+
+<% if (locals.error) { %>
+  <div class="container mt-4">
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+  </div>
+<% } %>
