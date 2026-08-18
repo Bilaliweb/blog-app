@@ -34,7 +34,6 @@ async function loginUser(req, res) {
 
     // If all conditions are passed, return the jwt token
     const tokenForUser = createTokenForUser(findUser)
-    console.log('Check token for user: ', tokenForUser);
 
     // Redirect to home screen
     return res.cookie('token', tokenForUser).redirect('/')
@@ -48,10 +47,16 @@ function redirectToLogin(req, res) {
 function redirectToSingup(req, res) {
     return res.render('signup')
 }
+// Log Out the user
+function logOutUser(req, res) {
+    // Clear the relevant cookie and redirect user to home screen
+    return res.clearCookie('token').redirect('/')
+}
 
 module.exports = {
     signupUser,
     loginUser,
     redirectToLogin,
-    redirectToSingup
+    redirectToSingup,
+    logOutUser
 }

@@ -13,7 +13,6 @@ function authenticateProvidedToken(cookieName) {
         try {
             const userPayload = verifyUserToken(token)
             req.user = userPayload
-            console.log('Verify result: ', userPayload);
         } catch (error) {
             console.log('Error in verifying token: ', error);
         }

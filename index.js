@@ -25,9 +25,8 @@ app.use(cookieParser());
 // Authenticate token before landing to home page
 app.use(authenticateProvidedToken('token'))
 app.get('/', (req, res) => {
-    console.log('Check request for home: ', req);
-    
     return res.render('home', {
+        // 'req.user' coming/passed from auth middleware
         user: req.user
     })
 })
