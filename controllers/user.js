@@ -23,7 +23,7 @@ async function loginUser(req, res) {
     const findUser = await User.findOne({ email })
 
     // Throw error if user not found
-    if (!findUser) return res.status(401).json({ msg: 'Invalid Credentials.' })
+    if (!findUser) return res.render('login', {error: 'Invalid Credentials.' })
 
     // Compare user provided password to original hashed password for user trying to login
     const isMatch = await findUser.compareLoginPassword(password)
