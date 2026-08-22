@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { createNewBlogRoute, postNewBlog } = require("../controllers/blog");
+const { createNewBlogRoute, postNewBlog, blogDetails, addComments } = require("../controllers/blog");
 const multer = require('multer');
 const path = require('path');
 
@@ -24,5 +24,9 @@ blogRouter.get('/create', createNewBlogRoute)
 // Post Create a blog
 // upload.single is used for uploading the image and pass on the file object to controller
 blogRouter.post('/createBlog', upload.single('coverImage'), postNewBlog)
+// Get Blog Details
+blogRouter.get('/:id', blogDetails)
+// Add Comments
+blogRouter.post('/:id/comments', addComments)
 
 module.exports = blogRouter;

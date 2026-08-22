@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('./partials/head') %> 
+    <title>Blog Details</title>
+</head>
+<body>
+    <%- include('./partials/nav') %> 
+
+    <div class="container mt-4">
+        <h1><%= blogDetail.title %> </h1>
+        <img src="<%= blogDetail.coverImageURL %>" width="300px">
+        <pre><%= blogDetail.description %> </pre>
+    </div>
+
+    <div class="container mt-4">
+        <h3>Created By:</h3>
+        <img src="<%= blogDetail.createdBy.profileImageURL %>" style="width:120px; height:120px; border-radius:50%; object-fit:cover;" class="p-1"><%= blogDetail.createdBy.fullName %>
+    </div>
+
+    <div class="container mt-4">
+        <h3>Public Comments (<%= comments.length %>)</h3>
+        <!-- User can comment only if he is logged in -->
+        <% if (locals.user) { %>
+            <div class="container mt-4">
+                <form action="/blog/<%= blogDetail._id %>/comments" method="post">
+                    <div class="mb-3">
+                        <label for="comments" class="form-label">Add Comments</label>
+                        <input type="text" class="form-control" id="comments" name="comment" placeholder="Enter your comment here">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        <% } %>
+        
+        <!-- Showing comments -->
+        <% if (locals.comments) { %>
+            <div class="container mt-4">
+                <% comments.forEach(comment => { %>
+                    <div>
+                        <img src="<%= comment.createdBy.profileImageURL %>" style="width:50px; height:50px; border-radius:50%; object-fit:cover" class="p-1"><%= comment.createdBy.fullName %>
+                        <pre class="mt-1"><%= comment.comment %></pre>
+                    </div>
+                <% }) %>
+            </div>
+        <% } %>
+    </div>
+
+
+    <%- include('./partials/script') %> 
+</body>
+</html>
