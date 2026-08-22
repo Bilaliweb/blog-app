@@ -37,7 +37,6 @@ async function postNewBlog(req, res) {
 
 // Fetch Blog Details
 async function blogDetails(req, res) {
-    console.log('Request in detail: ', req.params);
     // Get id from params
     const blogId = req.params.id
 
@@ -51,14 +50,12 @@ async function blogDetails(req, res) {
             to populate exact referenced data.
         */
         const blog = await Blog.findById(blogId).populate('createdBy')
-        console.log('Fetched blog: ', blog);
 
+        // If blog not found
         if(!blog) return res.status(404).json({ msg: 'Blog not found.' })
 
         // Fetch comments for that blog
         const blogComments = await Comment.find({ blogId }).populate('createdBy');
-        console.log('Comments for blog: ', blogComments);
-        
 
         // Render blog detail page with blog details
         return res.render('blogDetail', {
@@ -74,7 +71,6 @@ async function blogDetails(req, res) {
 
 // Add comments for blog
 async function addComments(req, res) {
-    console.log('Request from comments: ', req.body);
     const blog_id = req.params.id
     const user_id = req.user._id
 
@@ -85,6 +81,7 @@ async function addComments(req, res) {
         createdBy: user_id
     })
 
+    // Redirect to blog detail page on success
     return res.redirect(`/blog/${blog_id}`)
 }
 

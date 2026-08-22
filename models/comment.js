@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
 
+// Create a Comment schema
 const commentSchema = new Schema({
     comment: {
         type: String,
@@ -17,6 +18,8 @@ const commentSchema = new Schema({
     timestamps: true
 })
 
+// Creating the table comment
 const Comment = model('comment', commentSchema)
 
+// Exporting the model
 module.exports = Comment;
